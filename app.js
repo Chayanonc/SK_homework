@@ -98,55 +98,29 @@ const randomCard = () => {
         const number = Math.floor(Math.random() * 13 + 1);
         const symbol = Math.floor(Math.random() * 4 + 1);
 
-        let strCard = "";
+        const symbolInit = ['Clubs-',"Diamond-", "Hearts-", "Spade-"]
+
         let strCardObj = {
             str: "",
             letter: 0,
             value: 0,
         };
 
-        switch (symbol) {
-            case 1:
-                strCard = "Clubs-";
-                strCardObj.str = "Clubs-";
-                strCardObj.letter = 0;
-                break;
-            case 2:
-                strCard = "Diamond-";
-                strCardObj.str = "Diamond-";
-                strCardObj.letter = 1;
-                break;
-            case 3:
-                strCard = "Hearts-";
-                strCardObj.str = "Hearts-";
-                strCardObj.letter = 2;
-                break;
-            case 4:
-                strCard = "Spade-";
-                strCardObj.str = "Spade-";
-                strCardObj.letter = 3;
-                break;
-            default:
-                "";
-                break;
-        }
+        // const testsym = symbolInit[symbol-1]
+        strCardObj.str = symbolInit[symbol-1]
         if ([1, 11, 12, 13].indexOf(number) >= 0) {
             strCardObj.value = 0;
             switch (number) {
                 case 1:
-                    strCard += "One";
                     strCardObj.str += "One";
                     break;
                 case 11:
-                    strCard += "Jack";
                     strCardObj.str += "Jack";
                     break;
                 case 12:
-                    strCard += "Queen";
                     strCardObj.str += "Queen";
                     break;
                 case 13:
-                    strCard += "King";
                     strCardObj.str += "King";
                     break;
 
@@ -154,7 +128,6 @@ const randomCard = () => {
                     break;
             }
         } else {
-            strCard += number;
             strCardObj.str += number;
             strCardObj.value = number;
         }
