@@ -9,7 +9,7 @@ const yourBet = () => {
             if (bet.match(/^\d/)) {
                 resolve(parseInt(bet))
             } else {
-                reject('Invalid input')
+                resolve(false)
             }
         })
     })
@@ -35,34 +35,39 @@ const main = async () => {
         console.log("Please put your bet");
 
         const bet = await yourBet();
-        let user = [];
-        let dealer = [];
+        if (bet) {
 
-        for (let i = 0; i < 2; i++) {
-            const tempUser = await randomCard();
-            user.push(tempUser);
-            const tempDealer = await randomCard();
-            dealer.push(tempDealer);
-        }
+            let user = [];
+            let dealer = [];
 
-        console.log(`You got ${user[0]["str"]}, ${user[1]["str"]}`);
-        console.log(`The dealer got ${dealer[0]["str"]}, ${dealer[1]["str"]}`);
-
-        const results = await checkWinner(user, dealer, bet);
-        console.log(results.message);
-        if (results.betStatus == 3) {
-            yourChips -= bet
-        }
-        if (results.betStatus == 1) {
-            const answerPlayMore = await checkPlayMore()
-            yourChips += bet
-            if (!answerPlayMore) {
-                console.log(`You got total ${yourChips} chips`)
-                statusPlay = false;
-                rl.close()
+            for (let i = 0; i < 2; i++) {
+                const tempUser = await randomCard();
+                user.push(tempUser);
+                const tempDealer = await randomCard();
+                dealer.push(tempDealer);
             }
-        }
 
+            console.log(`You got ${user[0]["str"]}, ${user[1]["str"]}`);
+            console.log(`The dealer got ${dealer[0]["str"]}, ${dealer[1]["str"]}`);
+
+            const results = await checkWinner(user, dealer, bet);
+            console.log(results.message);
+            if (results.betStatus == 3) {
+                yourChips -= bet
+            }
+            if (results.betStatus == 1) {
+                const answerPlayMore = await checkPlayMore()
+                yourChips += bet
+                if (!answerPlayMore) {
+                    console.log(`You got total ${yourChips} chips`)
+                    statusPlay = false;
+                    rl.close()
+                }
+            }
+
+        }else {
+            console.log("Please put your bet is number");
+        }
     } while (statusPlay);
 }
 
@@ -98,7 +103,7 @@ const randomCard = () => {
         const number = Math.floor(Math.random() * 13 + 1);
         const symbol = Math.floor(Math.random() * 4 + 1);
 
-        const symbolInit = ['Clubs-',"Diamond-", "Hearts-", "Spade-"]
+        const symbolInit = ['Clubs-', "Diamond-", "Hearts-", "Spade-"]
 
         let strCardObj = {
             str: "",
@@ -107,7 +112,7 @@ const randomCard = () => {
         };
 
         // const testsym = symbolInit[symbol-1]
-        strCardObj.str = symbolInit[symbol-1]
+        strCardObj.str = symbolInit[symbol - 1]
         if ([1, 11, 12, 13].indexOf(number) >= 0) {
             strCardObj.value = 0;
             switch (number) {
